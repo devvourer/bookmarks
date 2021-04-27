@@ -5,6 +5,6 @@ if (window.myBookmarklet !== undefined){
 else {
 document.body.appendChild(
     document.createElement('script')
-).src='https://b679f78fde0d.ngrok.io/static/js/bookmarklet.js?r='+Math.floor(Math.random()*99999999999999999999);
+).src='https://cd265a40f839.ngrok.io/static/js/bookmarklet.js?r='+Math.floor(Math.random()*99999999999999999999);
 }
 })();

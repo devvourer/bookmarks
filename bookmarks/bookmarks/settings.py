@@ -19,7 +19,7 @@ ALLOWED_HOSTS = [
     'mysite.com',
     'localhost',
     '127.0.0.1',
-    'b679f78fde0d.ngrok.io'
+    'cd265a40f839.ngrok.io'
 ]
 
 
@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Bishkek'
 
 USE_I18N = True
 
@@ -139,3 +139,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'My2K-N8_M2D9mRLKlZgYR5Eq'
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('user_detail', args=[u.username])
 }
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0

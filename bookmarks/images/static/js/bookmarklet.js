@@ -1,7 +1,7 @@
 (function(){
     alert('bookmarklet loaded');
     var jquery_version = '3.3.1';
-    var site_url = 'https://b679f78fde0d.ngrok.io/';
+    var site_url = 'https://cd265a40f839.ngrok.io/';
     var static_url = site_url + 'static/';
     var min_width = 100;
     var min_height = 100;

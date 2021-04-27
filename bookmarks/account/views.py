@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 from bookmarks.common.decorators import ajax_required
 from actions.utils import create_action
 from actions.models import Actions
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def user_login(request):
@@ -33,16 +33,6 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'account/login.html', {'form': form})
-
-
-@login_required
-def dashboard(request):
-    action = Actions.objects.exclude(user=request.user)
-    following_ids = request.user.following.values_list('id', flat=True)
-    if following_ids:
-        actions = action.filter(user_id__in=following_ids)
-    action = action.select_related('user', 'user__profile').prefetch_related('target')[:10]
-    return render(request, 'account/dashboard.html', {'section': 'dashboard', 'actions': action})
 
 
 def register(request):
@@ -108,3 +98,31 @@ def user_follow(request):
         except User.DoesNotExist:
             return JsonResponse({'status': 'ok'})
     return JsonResponse({'status': 'ok'})
+
+
+@login_required
+def dashboard(request):
+    actions = Actions.objects.exclude(user=request.user)
+    following_ids = request.user.following.values_list('id', flat=True)
+    if following_ids:
+        actions = actions.filter(user_id__in=following_ids)
+    actions = actions.select_related('user', 'user__profile').prefetch_related('target')
+    paginator = Paginator(actions, 5)
+    page = request.GET.get('page')
+    try:
+        actions = paginator.page(page)
+    except PageNotAnInteger:
+        actions = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+        actions = paginator.page(paginator.num_pages)
+    if request.is_ajax():
+        return render(request, 'actions/action/action_list_ajax.html', {'section': 'dashboard', 'actions': actions})
+    return render(request, 'account/dashboard.html', {'section': 'dashboard', 'actions': actions})
+#
+# @login_required
+# def action_list(request):
+#     actions = Actions.objects.exclude(user=request.user)
+#     following_ids = request.user.following.values_list('id', flat=True)
+#
